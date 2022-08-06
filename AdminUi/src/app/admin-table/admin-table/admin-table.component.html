@@ -9,19 +9,21 @@
     />
   </div>
   <table>
-    <th>
-      <input
-        type="checkbox"
-        name="allAdminId"
-        (change)="selectAll($any($event.target).checked)"
-      />
-    </th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Role</th>
-    <th>Action</th>
+    <thead class="divider">
+      <th>
+        <input
+          type="checkbox"
+          name="allAdminId"
+          (change)="selectAll($any($event.target).checked)"
+        />
+      </th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Action</th>
+    </thead>
     <tbody *ngFor="let data of itemsToDisplay; index as i">
-      <tr [ngClass]="{ 'selected-row': data.isChecked }">
+      <tr [ngClass]="{ 'selected-row': data.isChecked }" class="divider">
         <td>
           <input
             type="checkbox"
@@ -68,7 +70,14 @@
       </tr>
     </tbody>
   </table>
-  <footer style="display: flex">
+  <footer
+    style="
+      display: flex;
+      margin-left: 400px;
+      margin-right: 400px;
+      margin-top: 30px;
+    "
+  >
     <button type="button" (click)="deleteSelected()">Delete Selected</button>
     <app-pagination
       [current]="current"
