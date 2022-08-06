@@ -15,6 +15,7 @@ export class AdminTableComponent implements OnInit {
   originalData: any[] = [];
   public perPage = 10;
   public total = 0;
+  mainCheckBox = false;
 
   constructor(private service: AdminServiceService) {}
 
@@ -81,7 +82,12 @@ export class AdminTableComponent implements OnInit {
    * @param flag boolean
    */
   selectAll(flag: boolean) {
-    this.items.map((element: AdminTableData) => (element.isChecked = flag));
+    this.items
+      .slice(
+        this.current * this.perPage - this.perPage,
+        this.current * this.perPage
+      )
+      .map((element: AdminTableData) => (element.isChecked = flag));
   }
 
   /**
@@ -92,6 +98,8 @@ export class AdminTableComponent implements OnInit {
       return element.isChecked === false;
     });
     this.itemsToDisplay = this.paginate(this.current, this.perPage);
+    this.total = Math.ceil(this.items.length / this.perPage);
+    this.mainCheckBox = false;
   }
 
   /**
@@ -107,6 +115,7 @@ export class AdminTableComponent implements OnInit {
       );
     });
     this.itemsToDisplay = this.paginate(this.current, this.perPage);
+    this.total = Math.ceil(this.items.length / this.perPage);
   }
 
   /**
@@ -118,6 +127,7 @@ export class AdminTableComponent implements OnInit {
       return i !== index;
     });
     this.itemsToDisplay = this.paginate(this.current, this.perPage);
+    this.total = Math.ceil(this.items.length / this.perPage);
   }
 
   /**
