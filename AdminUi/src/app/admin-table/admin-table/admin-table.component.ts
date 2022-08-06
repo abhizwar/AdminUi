@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminServiceService } from '../admin-service.service';
+import { AdminData, AdminTableData } from './admin-table.interface';
 
 @Component({
   selector: 'app-admin-table',
@@ -7,10 +8,10 @@ import { AdminServiceService } from '../admin-service.service';
   styleUrls: ['./admin-table.component.scss'],
 })
 export class AdminTableComponent implements OnInit {
-  adminData: any = [];
+  adminData: AdminTableData[] = [];
   public current = 1;
-  public items: any = [];
-  public itemsToDisplay: any = [];
+  public items: AdminTableData[] = [];
+  public itemsToDisplay: AdminTableData[] = [];
   originalData: any[] = [];
   public perPage = 10;
   public total = 0;
@@ -18,8 +19,8 @@ export class AdminTableComponent implements OnInit {
   constructor(private service: AdminServiceService) {}
 
   ngOnInit(): void {
-    this.service.getAdminData().subscribe((res: any[]) => {
-      this.adminData = res.map((element) => {
+    this.service.getAdminData().subscribe((res: AdminData[]) => {
+      this.adminData = res.map((element: AdminData) => {
         return { ...element, isChecked: false, isEdit: false };
       });
       this.items = this.adminData;
@@ -60,9 +61,9 @@ export class AdminTableComponent implements OnInit {
    * This method returns the array of data for the particular page
    * @param current number
    * @param perPage number
-   * @returns string[]
+   * @returns AdminTableData[]
    */
-  public paginate(current: number, perPage: number): string[] {
+  public paginate(current: number, perPage: number): AdminTableData[] {
     return [...this.items.slice((current - 1) * perPage).slice(0, perPage)];
   }
 
@@ -80,14 +81,14 @@ export class AdminTableComponent implements OnInit {
    * @param flag boolean
    */
   selectAll(flag: boolean) {
-    this.items.map((element: any) => (element.isChecked = flag));
+    this.items.map((element: AdminTableData) => (element.isChecked = flag));
   }
 
   /**
    * This method delete whatever user has selected
    */
   deleteSelected() {
-    this.items = this.items.filter((element: any) => {
+    this.items = this.items.filter((element: AdminTableData) => {
       return element.isChecked === false;
     });
     this.itemsToDisplay = this.paginate(this.current, this.perPage);
@@ -98,7 +99,7 @@ export class AdminTableComponent implements OnInit {
    * @param dataToSearch string
    */
   searchAdmin(dataToSearch: string) {
-    this.items = this.originalData.filter((element: any) => {
+    this.items = this.originalData.filter((element: AdminTableData) => {
       return (
         element.role.includes(dataToSearch) ||
         element.email.includes(dataToSearch) ||
@@ -113,7 +114,7 @@ export class AdminTableComponent implements OnInit {
    * @param index number
    */
   deleteEntry(index: number) {
-    this.items = this.items.filter((element: any, i: number) => {
+    this.items = this.items.filter((element: AdminTableData, i: number) => {
       return i !== index;
     });
     this.itemsToDisplay = this.paginate(this.current, this.perPage);
